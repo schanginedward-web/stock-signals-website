@@ -3,669 +3,859 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Signals - KI-basierte Aktien-Analyse</title>
-    <meta name="description" content="KI-basierte Aktien-Analyse mit übersichtlichen Scores für 200+ US-Aktien. Reine Information, keine Anlageberatung.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <title>Edaris AI — Aktien-Analyse mit Klarheit</title>
+    <meta name="description" content="Edaris AI — KI-basierte Aktien-Analyse mit über 200 US-Aktien. Klare Scores. Reine Information. Keine Anlageberatung.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%231e3a8a%22/><text x=%2250%22 y=%2268%22 font-size=%2260%22 font-family=%22serif%22 text-anchor=%22middle%22 fill=%22%23b8935a%22>E</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --primary: #00ff88;
-            --secondary: #00ccff;
-            --bg-dark: #0a0e1a;
-            --bg-card: #131829;
-            --bg-card-hover: #1a2035;
-            --text-primary: #ffffff;
-            --text-secondary: #8892b0;
-            --border: #1e2a45;
+            --royal: #1e3a8a;
+            --navy: #0f172a;
+            --cream: #f5f1e8;
+            --gold: #b8935a;
+            --gold-light: #d4b98a;
+            --charcoal: #1a1a1a;
+            --grey: #6b7280;
+            --grey-light: #e5e7eb;
+            --white: #fafaf7;
+            --border-dark: rgba(184, 147, 90, 0.15);
+            --border-light: rgba(26, 26, 26, 0.08);
         }
         
         html { scroll-behavior: smooth; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            line-height: 1.7;
             overflow-x: hidden;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
         }
         
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 204, 255, 0.08) 0%, transparent 50%);
-            animation: pulse 15s ease-in-out infinite;
+        h1, h2, h3, h4, .serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
-        /* Navigation */
+        /* ==================== NAVIGATION ==================== */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 15px 40px;
-            background: rgba(10, 14, 26, 0.85);
+            padding: 24px 60px;
+            background: rgba(245, 241, 232, 0.92);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
         }
         
         .logo {
-            font-size: 1.4em;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
+            color: var(--charcoal);
+        }
+        
+        .logo-mark {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.4s ease;
+        }
+        
+        .logo:hover .logo-mark {
+            transform: rotate(-5deg);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        
+        .logo-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--royal);
+        }
+        
+        .logo-tagline {
+            font-size: 0.65em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-top: 2px;
+            font-weight: 500;
         }
         
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 45px;
             list-style: none;
         }
         
         .nav-links a {
-            color: var(--text-secondary);
+            color: var(--charcoal);
             text-decoration: none;
-            font-size: 0.95em;
+            font-size: 0.85em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 500;
             transition: color 0.3s;
+            position: relative;
         }
         
-        .nav-links a:hover {
-            color: var(--primary);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
         }
+        
+        .nav-links a:hover { color: var(--royal); }
+        .nav-links a:hover::after { width: 100%; }
         
         .nav-cta {
-            padding: 10px 24px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
-            border-radius: 30px;
+            padding: 12px 28px;
+            background: var(--royal);
+            color: var(--cream);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9em;
-            transition: transform 0.3s, box-shadow 0.3s;
+            font-size: 0.8em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid var(--royal);
         }
         
         .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            background: transparent;
+            color: var(--royal);
         }
         
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 30px;
-        }
-        
-        /* Hero Section */
+        /* ==================== HERO ==================== */
         .hero {
-            padding: 160px 0 100px;
-            text-align: center;
+            padding: 220px 60px 140px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+            min-height: 90vh;
         }
         
-        .hero-badge {
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 30px;
-            font-size: 0.85em;
-            color: var(--primary);
-            margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
+            gap: 12px;
+            font-size: 0.75em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 40px;
+            font-weight: 500;
         }
         
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .hero-eyebrow::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
         }
         
         h1 {
-            font-size: 4em;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
+            font-size: 5.5em;
+            color: var(--royal);
+            margin-bottom: 40px;
+            font-weight: 400;
             letter-spacing: -0.02em;
-            animation: fadeInUp 0.8s ease 0.1s both;
+            line-height: 1;
         }
         
-        h1 .gradient-text {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1 em {
+            font-style: italic;
+            color: var(--gold);
+            font-weight: 300;
         }
         
         .hero-subtitle {
-            font-size: 1.3em;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 40px;
-            animation: fadeInUp 0.8s ease 0.2s both;
+            font-size: 1.15em;
+            color: var(--grey);
+            margin-bottom: 50px;
+            max-width: 520px;
+            line-height: 1.8;
+            font-weight: 300;
         }
         
         .hero-buttons {
             display: flex;
             gap: 20px;
-            justify-content: center;
             flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.3s both;
         }
         
         .btn-primary {
-            padding: 16px 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
+            padding: 18px 42px;
+            background: var(--royal);
+            color: var(--cream);
             text-decoration: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 1.05em;
-            transition: all 0.3s;
-            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
-            border: none;
-            cursor: pointer;
+            font-size: 0.8em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            border: 1px solid var(--royal);
+            transition: all 0.3s ease;
         }
         
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.5);
+            background: var(--navy);
+            border-color: var(--navy);
+            transform: translateY(-2px);
         }
         
         .btn-secondary {
-            padding: 16px 40px;
+            padding: 18px 42px;
             background: transparent;
-            color: var(--text-primary);
+            color: var(--charcoal);
             text-decoration: none;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1.05em;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
+            font-size: 0.8em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            border: 1px solid var(--charcoal);
+            transition: all 0.3s ease;
         }
         
         .btn-secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            background: var(--charcoal);
+            color: var(--cream);
         }
         
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            padding: 60px 0;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            margin: 80px 0;
+        /* Hero Visual - Elegant Data */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        .stat {
+        .hero-circle {
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slowRotate 60s linear infinite;
+        }
+        
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .hero-circle::before {
+            content: '';
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            border: 1px solid rgba(184, 147, 90, 0.3);
+        }
+        
+        .hero-circle::after {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: var(--royal);
+        }
+        
+        .hero-monogram {
+            position: relative;
+            z-index: 2;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 8em;
+            color: var(--gold);
+            font-weight: 300;
+            font-style: italic;
+            animation: counterRotate 60s linear infinite;
+        }
+        
+        @keyframes counterRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        
+        /* ==================== SECTION HEADERS ==================== */
+        .section {
+            padding: 140px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            margin-bottom: 90px;
+            max-width: 720px;
+        }
+        
+        .section-header.center {
+            margin-left: auto;
+            margin-right: auto;
             text-align: center;
         }
         
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+        .section-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.75em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 25px;
+            font-weight: 500;
         }
         
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.95em;
+        .section-header.center .section-eyebrow {
+            justify-content: center;
         }
         
-        /* Live Demo */
-        .demo-section {
-            padding: 80px 0;
-            text-align: center;
+        .section-eyebrow::before,
+        .section-header.center .section-eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
         }
         
-        .section-title {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .section-header.center .section-eyebrow::before,
+        .section-header.center .section-eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+        
+        h2 {
+            font-size: 3.8em;
+            color: var(--royal);
+            margin-bottom: 25px;
+            font-weight: 400;
             letter-spacing: -0.02em;
         }
         
-        .section-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1em;
-            margin-bottom: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        h2 em {
+            font-style: italic;
+            color: var(--gold);
+            font-weight: 300;
         }
         
-        .demo-window {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 900px;
+        .section-description {
+            font-size: 1.05em;
+            color: var(--grey);
+            line-height: 1.9;
+            font-weight: 300;
+        }
+        
+        /* ==================== LIVE DASHBOARD ==================== */
+        .dashboard-wrapper {
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 60px;
+            max-width: 1100px;
             margin: 0 auto;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 40px 80px -40px rgba(15, 23, 42, 0.15);
         }
         
-        .demo-header {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .demo-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .demo-dot.red { background: #ff5f57; }
-        .demo-dot.yellow { background: #febc2e; }
-        .demo-dot.green { background: #28c840; }
-        
-        .demo-title {
-            margin-left: 15px;
-            color: var(--text-secondary);
-            font-size: 0.9em;
-        }
-        
-        .demo-content {
-            text-align: left;
-        }
-        
-        .demo-stock {
+        .dashboard-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: var(--bg-dark);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-        
-        .demo-stock:hover {
-            border-color: var(--primary);
-            transform: translateX(5px);
-        }
-        
-        .demo-stock-left {
-            display: flex;
-            align-items: center;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 10px;
+            flex-wrap: wrap;
             gap: 20px;
         }
         
-        .demo-symbol {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: var(--text-primary);
-            min-width: 80px;
+        .dashboard-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--royal);
+            font-weight: 500;
         }
         
-        .demo-score {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.9em;
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7em;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 500;
         }
         
-        .demo-score.high {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--primary);
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulseDot 2s ease-in-out infinite;
         }
         
-        .demo-score.medium {
-            background: rgba(255, 200, 0, 0.15);
-            color: #ffc800;
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
         
-        .demo-score.low {
-            background: rgba(255, 100, 100, 0.15);
-            color: #ff6464;
+        .stock-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 30px;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
         }
         
-        .demo-right {
+        .stock-item:hover {
+            padding-left: 12px;
+        }
+        
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stock-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .stock-symbol {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6em;
+            font-weight: 500;
+            color: var(--charcoal);
+            min-width: 90px;
+            letter-spacing: 0.02em;
+        }
+        
+        .stock-score {
+            font-size: 0.75em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--grey);
+            font-weight: 500;
+        }
+        
+        .stock-score-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            color: var(--royal);
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .stock-price {
             text-align: right;
         }
         
-        .demo-price {
-            font-size: 1.1em;
-            font-weight: 600;
+        .stock-price-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3em;
+            font-weight: 500;
+            color: var(--charcoal);
         }
         
-        .demo-change {
-            font-size: 0.9em;
+        .stock-change {
+            font-size: 0.8em;
+            margin-top: 4px;
+            letter-spacing: 0.05em;
         }
         
-        .demo-change.positive { color: var(--primary); }
-        .demo-change.negative { color: #ff6464; }
+        .stock-change.positive { color: var(--royal); }
+        .stock-change.negative { color: #b91c1c; }
         
-        /* Features */
-        .features {
-            padding: 80px 0;
+        .stock-arrow {
+            color: var(--gold);
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
         }
         
+        .stock-item:hover .stock-arrow {
+            transform: translateX(6px);
+        }
+        
+        /* ==================== FEATURES ==================== */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border-light);
+            border: 1px solid var(--border-light);
         }
         
         .feature {
-            background: var(--bg-card);
-            padding: 35px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            transition: all 0.4s;
+            background: var(--cream);
+            padding: 60px 45px;
+            cursor: pointer;
+            transition: background 0.4s ease;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
-        }
-        
-        .feature:hover::before {
-            transform: scaleX(1);
         }
         
         .feature:hover {
-            background: var(--bg-card-hover);
-            transform: translateY(-5px);
-            border-color: var(--primary);
+            background: var(--white);
         }
         
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            display: inline-block;
+        .feature-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9em;
+            color: var(--gold);
+            letter-spacing: 0.2em;
+            font-weight: 500;
+            margin-bottom: 30px;
         }
         
         .feature h3 {
-            font-size: 1.3em;
-            margin-bottom: 12px;
-            color: var(--text-primary);
+            font-size: 1.8em;
+            color: var(--royal);
+            margin-bottom: 18px;
+            font-weight: 500;
         }
         
         .feature p {
-            color: var(--text-secondary);
-            line-height: 1.7;
+            color: var(--grey);
+            line-height: 1.8;
+            font-size: 0.95em;
+            font-weight: 300;
         }
         
-        /* Pricing */
-        .pricing {
-            padding: 80px 0;
+        .feature-more {
+            margin-top: 24px;
+            color: var(--gold);
+            font-size: 0.75em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
+        .feature-more::after {
+            content: '→';
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover .feature-more::after {
+            transform: translateX(5px);
+        }
+        
+        /* ==================== PRICING ==================== */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-top: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .price-card {
-            background: var(--bg-card);
-            padding: 40px 30px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 55px 40px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
             position: relative;
         }
         
         .price-card.featured {
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.15);
+            border: 1px solid var(--gold);
+            background: var(--royal);
+            color: var(--cream);
         }
         
-        .price-card.featured::before {
-            content: 'BELIEBT';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 700;
-            letter-spacing: 1px;
+        .price-card.featured .price-name,
+        .price-card.featured .price-period,
+        .price-card.featured .price-features li {
+            color: var(--cream);
+        }
+        
+        .price-card.featured .price-value {
+            color: var(--gold);
+        }
+        
+        .price-card.featured .price-features li::before {
+            color: var(--gold);
         }
         
         .price-name {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 15px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6em;
+            color: var(--royal);
+            margin-bottom: 20px;
+            font-weight: 500;
         }
         
         .price-value {
-            font-size: 3em;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5em;
+            font-weight: 400;
+            color: var(--royal);
+            line-height: 1;
+            margin-bottom: 8px;
         }
         
         .price-period {
-            color: var(--text-secondary);
-            font-size: 0.9em;
-            margin-bottom: 30px;
+            font-size: 0.8em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-bottom: 35px;
+            font-weight: 500;
         }
         
         .price-features {
             list-style: none;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: left;
+            padding: 35px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .price-card.featured .price-features {
+            border-color: rgba(245, 241, 232, 0.15);
         }
         
         .price-features li {
             padding: 10px 0;
-            color: var(--text-secondary);
+            color: var(--charcoal);
             display: flex;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 0.9em;
+            font-weight: 300;
         }
         
         .price-features li::before {
-            content: '✓';
-            color: var(--primary);
-            font-weight: 700;
+            content: '—';
+            color: var(--gold);
+            font-weight: 500;
+            flex-shrink: 0;
         }
         
         .price-btn {
             display: block;
-            padding: 14px;
+            padding: 16px;
             background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            border-radius: 30px;
+            color: var(--royal);
+            border: 1px solid var(--royal);
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.75em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
         
         .price-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            background: var(--royal);
+            color: var(--cream);
         }
         
         .price-card.featured .price-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
-            border: none;
+            background: var(--gold);
+            color: var(--royal);
+            border-color: var(--gold);
         }
         
         .price-card.featured .price-btn:hover {
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+            background: transparent;
+            color: var(--gold);
         }
         
-        /* Signup */
+        .trial-note {
+            text-align: center;
+            margin-bottom: 60px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            font-style: italic;
+            color: var(--gold);
+            font-weight: 400;
+        }
+        
+        /* ==================== SIGNUP ==================== */
         .signup-section {
-            padding: 100px 0;
+            background: var(--royal);
+            color: var(--cream);
+            padding: 140px 60px;
             text-align: center;
         }
         
-        .signup-box {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 204, 255, 0.05));
-            border: 1px solid var(--primary);
-            border-radius: 30px;
-            padding: 60px 40px;
-            max-width: 800px;
+        .signup-content {
+            max-width: 700px;
             margin: 0 auto;
         }
         
-        .signup-box h2 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+        .signup-section h2 {
+            color: var(--cream);
+            font-size: 4em;
+            margin-bottom: 30px;
         }
         
-        .signup-box p {
-            color: var(--text-secondary);
+        .signup-section h2 em {
+            color: var(--gold);
+        }
+        
+        .signup-section p {
+            color: rgba(245, 241, 232, 0.75);
             font-size: 1.1em;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            font-weight: 300;
+            line-height: 1.9;
         }
         
         .signup-form {
             display: flex;
-            gap: 15px;
-            max-width: 500px;
+            gap: 0;
+            max-width: 560px;
             margin: 0 auto;
-            flex-wrap: wrap;
-            justify-content: center;
+            border: 1px solid var(--gold);
         }
         
         .signup-form input {
             flex: 1;
-            min-width: 250px;
-            padding: 16px 24px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            color: var(--text-primary);
-            font-size: 1em;
+            padding: 22px 28px;
+            background: transparent;
+            border: none;
+            color: var(--cream);
+            font-size: 0.95em;
             outline: none;
-            transition: border-color 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
         }
         
-        .signup-form input:focus {
-            border-color: var(--primary);
+        .signup-form input::placeholder {
+            color: rgba(245, 241, 232, 0.5);
         }
         
         .signup-form button {
-            padding: 16px 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
+            padding: 22px 42px;
+            background: var(--gold);
+            color: var(--royal);
             border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 1em;
+            font-size: 0.75em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
         
         .signup-form button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+            background: var(--gold-light);
         }
         
-        /* Disclaimer */
+        .signup-note {
+            margin-top: 25px;
+            font-size: 0.8em;
+            color: rgba(245, 241, 232, 0.5);
+            letter-spacing: 0.05em;
+        }
+        
+        /* ==================== DISCLAIMER ==================== */
         .disclaimer {
-            background: rgba(255, 150, 0, 0.05);
-            border-left: 4px solid #ff9900;
-            padding: 25px 30px;
-            border-radius: 12px;
-            margin: 60px auto;
             max-width: 900px;
-            font-size: 0.9em;
-            color: #ffcc99;
-            line-height: 1.7;
+            margin: 80px auto 0;
+            padding: 40px 50px;
+            border-left: 2px solid var(--gold);
+            background: rgba(184, 147, 90, 0.05);
+            font-size: 0.85em;
+            color: var(--grey);
+            line-height: 1.9;
+            font-weight: 300;
         }
         
         .disclaimer strong {
-            color: #ff9900;
+            color: var(--royal);
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
         }
         
-        /* Footer */
+        /* ==================== FOOTER ==================== */
         footer {
-            padding: 60px 0 40px;
-            border-top: 1px solid var(--border);
-            margin-top: 80px;
+            background: var(--navy);
+            color: var(--cream);
+            padding: 90px 60px 40px;
         }
         
-        .footer-content {
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 40px;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+        
+        .footer-brand .logo-name {
+            color: var(--cream);
         }
         
         .footer-brand p {
-            color: var(--text-secondary);
-            margin-top: 15px;
+            color: rgba(245, 241, 232, 0.55);
+            margin-top: 25px;
             font-size: 0.9em;
+            line-height: 1.9;
+            font-weight: 300;
+            max-width: 340px;
         }
         
         .footer-col h4 {
-            margin-bottom: 20px;
-            font-size: 1em;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: var(--gold);
+            font-weight: 500;
         }
         
         .footer-col ul {
@@ -673,316 +863,614 @@
         }
         
         .footer-col ul li {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         
         .footer-col ul li a {
-            color: var(--text-secondary);
+            color: rgba(245, 241, 232, 0.65);
             text-decoration: none;
             font-size: 0.9em;
             transition: color 0.3s;
+            font-weight: 300;
         }
         
         .footer-col ul li a:hover {
-            color: var(--primary);
+            color: var(--gold);
         }
         
         .footer-bottom {
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: 0.85em;
+            padding-top: 40px;
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+            color: rgba(245, 241, 232, 0.4);
+            font-size: 0.8em;
+            letter-spacing: 0.1em;
         }
         
-        /* Mobile */
-        @media (max-width: 768px) {
-            nav { padding: 12px 20px; }
+        /* ==================== MODALS ==================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--cream);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.4s ease;
+            position: relative;
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 50px 60px 30px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: sticky;
+            top: 0;
+            background: var(--cream);
+            z-index: 10;
+        }
+        
+        .modal-symbol {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8em;
+            color: var(--royal);
+            font-weight: 500;
+            line-height: 1;
+        }
+        
+        .modal-company {
+            color: var(--grey);
+            font-size: 0.9em;
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--grey);
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            transition: color 0.3s;
+            font-weight: 300;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: var(--royal);
+        }
+        
+        .modal-body {
+            padding: 50px 60px;
+        }
+        
+        .modal-price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .modal-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            color: var(--charcoal);
+            font-weight: 400;
+            line-height: 1;
+        }
+        
+        .modal-change {
+            font-size: 0.95em;
+            margin-top: 10px;
+            letter-spacing: 0.05em;
+        }
+        
+        .modal-change.positive { color: var(--royal); }
+        .modal-change.negative { color: #b91c1c; }
+        
+        .modal-score-label {
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 500;
+        }
+        
+        .modal-score-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4em;
+            color: var(--royal);
+            line-height: 1;
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            background: var(--white);
+            padding: 30px;
+            margin-bottom: 50px;
+            height: 320px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .factor {
+            padding: 30px;
+            background: var(--cream);
+        }
+        
+        .factor-name {
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .factor-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2em;
+            color: var(--royal);
+            font-weight: 500;
+            line-height: 1;
+        }
+        
+        .factor-bar {
+            margin-top: 15px;
+            height: 2px;
+            background: var(--border-light);
+            overflow: hidden;
+        }
+        
+        .factor-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 1s ease;
+        }
+        
+        /* Feature Modal */
+        .feature-modal-content {
+            max-width: 700px;
+        }
+        
+        .feature-modal-body {
+            padding: 50px 60px;
+        }
+        
+        .feature-modal-icon {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9em;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+        
+        .feature-modal-body h2 {
+            font-size: 2.5em;
+            color: var(--royal);
+            margin-bottom: 30px;
+        }
+        
+        .feature-modal-body p {
+            color: var(--grey);
+            margin-bottom: 20px;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+        
+        .feature-modal-body strong {
+            color: var(--charcoal);
+            font-weight: 500;
+        }
+        
+        .feature-modal-body ul {
+            margin: 25px 0 25px 25px;
+            color: var(--grey);
+        }
+        
+        .feature-modal-body li {
+            margin-bottom: 12px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+        
+        /* ==================== MOBILE ==================== */
+        @media (max-width: 968px) {
+            nav { padding: 18px 24px; }
             .nav-links { display: none; }
-            h1 { font-size: 2.5em; }
-            .hero { padding: 120px 0 60px; }
-            .stats { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .stat-value { font-size: 1.8em; }
-            .section-title { font-size: 1.8em; }
-            .demo-window { padding: 20px; }
-            .demo-stock { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .demo-right { text-align: left; }
-            .price-card.featured { transform: none; }
-            .footer-content { grid-template-columns: 1fr; gap: 30px; }
-            .signup-box { padding: 40px 20px; }
-            .signup-box h2 { font-size: 1.8em; }
+            .logo-name { font-size: 1.3em; }
+            
+            h1 { font-size: 3em; }
+            h2 { font-size: 2.5em; }
+            
+            .hero {
+                padding: 160px 24px 80px;
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            
+            .hero-visual { display: none; }
+            
+            .section { padding: 80px 24px; }
+            
+            .dashboard-wrapper { padding: 30px 24px; }
+            
+            .stock-item {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .stock-price { text-align: left; }
+            .stock-arrow { display: none; }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .price-card.featured {
+                transform: none;
+            }
+            
+            .signup-section { padding: 80px 24px; }
+            .signup-section h2 { font-size: 2.5em; }
+            
+            .signup-form {
+                flex-direction: column;
+                border: none;
+            }
+            
+            .signup-form input {
+                border: 1px solid var(--gold);
+                margin-bottom: 10px;
+            }
+            
+            .signup-form button {
+                border: 1px solid var(--gold);
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            footer { padding: 60px 24px 30px; }
+            
+            .modal-header { padding: 30px 24px 20px; }
+            .modal-body { padding: 30px 24px; }
+            .modal-price { font-size: 2.5em; }
+            .modal-score-value { font-size: 3em; }
+            
+            .factors-grid { grid-template-columns: 1fr; }
+            
+            .feature-modal-body { padding: 30px 24px; }
+        }
+        
+        @media (max-width: 500px) {
+            h1 { font-size: 2.4em; }
+            h2 { font-size: 2em; }
+            .hero { padding: 140px 20px 60px; }
+            .stock-symbol { font-size: 1.3em; min-width: 70px; }
+        }
+        
+        /* Smooth fade for elements */
+        .fade-in {
+            animation: fadeIn 0.8s ease both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
 
-    <!-- Navigation -->
+    <!-- ==================== NAVIGATION ==================== -->
     <nav>
-        <a href="#" class="logo">📊 Stock Signals</a>
+        <a href="#" class="logo">
+            <svg class="logo-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="none" stroke="#b8935a" stroke-width="0.5"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#b8935a" stroke-width="0.5" opacity="0.5"/>
+                <text x="50" y="62" font-family="Cormorant Garamond, serif" font-size="42" font-weight="500" text-anchor="middle" fill="#1e3a8a">EA</text>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-name">Edaris</span>
+                <span class="logo-tagline">Intelligence</span>
+            </div>
+        </a>
         <ul class="nav-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#demo">Live-Demo</a></li>
+            <li><a href="#features">Analyse</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
             <li><a href="#pricing">Preise</a></li>
-            <li><a href="#signup">Anmelden</a></li>
+            <li><a href="#signup">Zugang</a></li>
         </ul>
-        <a href="#signup" class="nav-cta">Kostenlos testen</a>
+        <a href="#signup" class="nav-cta">1 Monat Gratis</a>
     </nav>
 
-    <!-- Hero -->
+    <!-- ==================== HERO ==================== -->
     <section class="hero">
-        <div class="container">
-            <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                In Entwicklung - Beta bald verfügbar
-            </div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">KI-basierte Aktien-Analyse</div>
             <h1>
-                Aktien-Analyse mit<br>
-                <span class="gradient-text">künstlicher Intelligenz</span>
+                Klarheit im<br>
+                <em>Kapitalmarkt.</em>
             </h1>
             <p class="hero-subtitle">
-                KI-basierte Analyse von 200+ US-Aktien. Übersichtliche Scores, 
-                technische Indikatoren und News-Sentiment - alles auf einen Blick.
+                Edaris analysiert über 200 US-Aktien mit künstlicher Intelligenz 
+                und liefert Ihnen klare, nachvollziehbare Scores — 
+                Tag für Tag, rund um die Uhr.
             </p>
             <div class="hero-buttons">
-                <a href="#signup" class="btn-primary">Kostenlos vormerken</a>
-                <a href="#demo" class="btn-secondary">Live-Demo ansehen</a>
+                <a href="#signup" class="btn-primary">1 Monat gratis testen</a>
+                <a href="#dashboard" class="btn-secondary">Live-Dashboard</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-circle">
+                <div class="hero-monogram">E</div>
             </div>
         </div>
     </section>
 
-    <!-- Stats -->
-    <section class="container">
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">200+</div>
-                <div class="stat-label">Aktien analysiert</div>
+    <!-- ==================== STATS ==================== -->
+    <section class="section" style="padding-top: 0;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light);">
+            <div style="background: var(--cream); padding: 50px 30px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', serif; font-size: 3.5em; color: var(--royal); font-weight: 400; line-height: 1;">200+</div>
+                <div style="font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-top: 15px; font-weight: 500;">Aktien täglich</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">9</div>
-                <div class="stat-label">Analyse-Faktoren</div>
+            <div style="background: var(--cream); padding: 50px 30px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', serif; font-size: 3.5em; color: var(--royal); font-weight: 400; line-height: 1;">9</div>
+                <div style="font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-top: 15px; font-weight: 500;">Analyse-Faktoren</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">24/7</div>
-                <div class="stat-label">Automatische Scans</div>
+            <div style="background: var(--cream); padding: 50px 30px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', serif; font-size: 3.5em; color: var(--royal); font-weight: 400; line-height: 1;">24/7</div>
+                <div style="font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-top: 15px; font-weight: 500;">Automatische Scans</div>
             </div>
-            <div class="stat">
-                <div class="stat-value">0€</div>
-                <div class="stat-label">In der Beta-Phase</div>
+            <div style="background: var(--cream); padding: 50px 30px; text-align: center;">
+                <div style="font-family: 'Cormorant Garamond', serif; font-size: 3.5em; color: var(--gold); font-weight: 400; line-height: 1;">1</div>
+                <div style="font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-top: 15px; font-weight: 500;">Monat kostenlos</div>
             </div>
         </div>
     </section>
 
-    <!-- Demo -->
-    <section class="demo-section" id="demo">
-        <div class="container">
-            <h2 class="section-title">So sieht es aus</h2>
-            <p class="section-subtitle">
-                Ein Blick in unser Dashboard mit echten Aktien-Signalen
+    <!-- ==================== LIVE DASHBOARD ==================== -->
+    <section class="section" id="dashboard">
+        <div class="section-header center">
+            <div class="section-eyebrow">Live-Ansicht</div>
+            <h2>Das <em>Dashboard.</em></h2>
+            <p class="section-description">
+                Echte Aktien-Signale, in Echtzeit. Klicken Sie auf eine Aktie für die Detailansicht mit Chart und Analyse.
             </p>
-            
-            <div class="demo-window">
-                <div class="demo-header">
-                    <span class="demo-dot red"></span>
-                    <span class="demo-dot yellow"></span>
-                    <span class="demo-dot green"></span>
-                    <span class="demo-title">stock-signals.app/dashboard</span>
+        </div>
+        
+        <div class="dashboard-wrapper">
+            <div class="dashboard-head">
+                <div class="dashboard-title">Heutige Signale</div>
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    Live
                 </div>
-                
-                <div class="demo-content">
-                    <div class="demo-stock">
-                        <div class="demo-stock-left">
-                            <span class="demo-symbol">NVDA</span>
-                            <span class="demo-score high">Score 78</span>
-                        </div>
-                        <div class="demo-right">
-                            <div class="demo-price">$495.22</div>
-                            <div class="demo-change positive">+6.1% (5T)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="demo-stock">
-                        <div class="demo-stock-left">
-                            <span class="demo-symbol">AMD</span>
-                            <span class="demo-score high">Score 75</span>
-                        </div>
-                        <div class="demo-right">
-                            <div class="demo-price">$145.80</div>
-                            <div class="demo-change positive">+4.2% (5T)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="demo-stock">
-                        <div class="demo-stock-left">
-                            <span class="demo-symbol">V</span>
-                            <span class="demo-score medium">Score 68</span>
-                        </div>
-                        <div class="demo-right">
-                            <div class="demo-price">$252.89</div>
-                            <div class="demo-change positive">+2.3% (5T)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="demo-stock">
-                        <div class="demo-stock-left">
-                            <span class="demo-symbol">TSLA</span>
-                            <span class="demo-score low">Score 42</span>
-                        </div>
-                        <div class="demo-right">
-                            <div class="demo-price">$248.42</div>
-                            <div class="demo-change negative">-3.1% (5T)</div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div id="stockList">
+                <!-- wird per JS gefüllt -->
             </div>
         </div>
     </section>
 
-    <!-- Features -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title" style="text-align: center;">Was uns besonders macht</h2>
-            <p class="section-subtitle" style="text-align: center;">
-                Neun Analyse-Faktoren kombiniert zu einem klaren Score
+    <!-- ==================== FEATURES ==================== -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <div class="section-eyebrow">Was uns auszeichnet</div>
+            <h2>Neun Faktoren.<br><em>Ein Score.</em></h2>
+            <p class="section-description">
+                Wir kombinieren technische Analyse, News, Insider-Aktivität und KI 
+                zu einem einzigen, nachvollziehbaren Wert. Klicken Sie auf einen Faktor für Details.
             </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature" onclick="openFeatureModal('analysis')">
+                <div class="feature-number">01</div>
+                <h3>Umfassende Analyse</h3>
+                <p>Über 200 US-Aktien aus allen relevanten Sektoren — kontinuierlich überwacht.</p>
+                <div class="feature-more">Mehr erfahren</div>
+            </div>
             
-            <div class="features-grid">
-                <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Umfassende Analyse</h3>
-                    <p>Über 200 US-Aktien werden kontinuierlich mit modernster Technologie analysiert und bewertet.</p>
-                </div>
-                
-                <div class="feature">
-                    <div class="feature-icon">📊</div>
-                    <h3>Klare Scores</h3>
-                    <p>Jede Aktie erhält einen Score von 0-100 basierend auf 9 verschiedenen Faktoren.</p>
-                </div>
-                
-                <div class="feature">
-                    <div class="feature-icon">📈</div>
-                    <h3>Technische Analyse</h3>
-                    <p>RSI, Momentum, Trend und Volumen - alle wichtigen Indikatoren übersichtlich aufbereitet.</p>
-                </div>
-                
-                <div class="feature">
-                    <div class="feature-icon">📰</div>
-                    <h3>News-Sentiment</h3>
-                    <p>Positive und negative Nachrichten werden automatisch erkannt und in den Score eingerechnet.</p>
-                </div>
-                
-                <div class="feature">
-                    <div class="feature-icon">🏢</div>
-                    <h3>Insider-Aktivität</h3>
-                    <p>Was machen die Firmenchefs? Insider-Käufe und -Verkäufe werden getrackt.</p>
-                </div>
-                
-                <div class="feature">
-                    <div class="feature-icon">🧠</div>
-                    <h3>Selbstlernend</h3>
-                    <p>Unser System lernt kontinuierlich aus Ergebnissen und verbessert seine Gewichtung.</p>
-                </div>
+            <div class="feature" onclick="openFeatureModal('scores')">
+                <div class="feature-number">02</div>
+                <h3>Klare Scores</h3>
+                <p>Jede Aktie erhält einen Score von 0 bis 100 — transparent und nachvollziehbar.</p>
+                <div class="feature-more">Mehr erfahren</div>
+            </div>
+            
+            <div class="feature" onclick="openFeatureModal('technical')">
+                <div class="feature-number">03</div>
+                <h3>Technische Analyse</h3>
+                <p>RSI, Momentum, Trend und Volumen — die wichtigsten Indikatoren, präzise aufbereitet.</p>
+                <div class="feature-more">Mehr erfahren</div>
+            </div>
+            
+            <div class="feature" onclick="openFeatureModal('news')">
+                <div class="feature-number">04</div>
+                <h3>News-Sentiment</h3>
+                <p>Positive und negative Nachrichten werden automatisch erkannt und gewichtet.</p>
+                <div class="feature-more">Mehr erfahren</div>
+            </div>
+            
+            <div class="feature" onclick="openFeatureModal('insider')">
+                <div class="feature-number">05</div>
+                <h3>Insider-Aktivität</h3>
+                <p>Was die Firmenchefs tun. Insider-Käufe und -Verkäufe werden getrackt.</p>
+                <div class="feature-more">Mehr erfahren</div>
+            </div>
+            
+            <div class="feature" onclick="openFeatureModal('ml')">
+                <div class="feature-number">06</div>
+                <h3>Selbstlernend</h3>
+                <p>Unser System lernt kontinuierlich aus Ergebnissen und verbessert sich.</p>
+                <div class="feature-more">Mehr erfahren</div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <h2 class="section-title" style="text-align: center;">Einfache Preise</h2>
-            <p class="section-subtitle" style="text-align: center;">
-                Während der Beta-Phase komplett kostenlos
+    <!-- ==================== PRICING ==================== -->
+    <section class="section" id="pricing">
+        <div class="section-header center">
+            <div class="section-eyebrow">Zugang</div>
+            <h2>Einfache <em>Preise.</em></h2>
+            <p class="section-description">
+                Während der Beta-Phase erhalten Sie <strong>einen Monat kostenlos</strong> — 
+                ohne Kreditkarte, ohne Verpflichtung.
             </p>
+        </div>
+        
+        <div class="trial-note">— Ein Monat. Kostenlos. Ohne Bedingungen. —</div>
+        
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div class="price-name">Essential</div>
+                <div class="price-value">9€</div>
+                <div class="price-period">pro Monat</div>
+                <ul class="price-features">
+                    <li>Top 10 Aktien täglich</li>
+                    <li>Score-Übersicht</li>
+                    <li>E-Mail-Benachrichtigungen</li>
+                    <li>Basis-Charts</li>
+                </ul>
+                <a href="#signup" class="price-btn">Kostenlos starten</a>
+            </div>
             
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <div class="price-name">Basic</div>
-                    <div class="price-value">9€</div>
-                    <div class="price-period">pro Monat</div>
-                    <ul class="price-features">
-                        <li>Top 10 Aktien täglich</li>
-                        <li>Score-Übersicht</li>
-                        <li>E-Mail Benachrichtigungen</li>
-                    </ul>
-                    <a href="#signup" class="price-btn">Vormerken</a>
-                </div>
-                
-                <div class="price-card featured">
-                    <div class="price-name">Pro</div>
-                    <div class="price-value">19€</div>
-                    <div class="price-period">pro Monat</div>
-                    <ul class="price-features">
-                        <li>Alle 200+ Aktien</li>
-                        <li>Detaillierte Analysen</li>
-                        <li>Technische Indikatoren</li>
-                        <li>News-Sentiment</li>
-                        <li>Insider-Tracking</li>
-                    </ul>
-                    <a href="#signup" class="price-btn">Vormerken</a>
-                </div>
-                
-                <div class="price-card">
-                    <div class="price-name">Premium</div>
-                    <div class="price-value">39€</div>
-                    <div class="price-period">pro Monat</div>
-                    <ul class="price-features">
-                        <li>Alles aus Pro</li>
-                        <li>Echtzeit-Alerts</li>
-                        <li>Persönliches Dashboard</li>
-                        <li>API-Zugang</li>
-                    </ul>
-                    <a href="#signup" class="price-btn">Vormerken</a>
-                </div>
+            <div class="price-card featured">
+                <div class="price-name">Signature</div>
+                <div class="price-value">19€</div>
+                <div class="price-period">pro Monat</div>
+                <ul class="price-features">
+                    <li>Alle 200+ Aktien</li>
+                    <li>Detaillierte Analysen</li>
+                    <li>Live-Charts & Indikatoren</li>
+                    <li>News-Sentiment</li>
+                    <li>Insider-Tracking</li>
+                    <li>Score-Alerts</li>
+                </ul>
+                <a href="#signup" class="price-btn">Kostenlos starten</a>
+            </div>
+            
+            <div class="price-card">
+                <div class="price-name">Private</div>
+                <div class="price-value">39€</div>
+                <div class="price-period">pro Monat</div>
+                <ul class="price-features">
+                    <li>Alles aus Signature</li>
+                    <li>Echtzeit-Alerts</li>
+                    <li>Persönliches Dashboard</li>
+                    <li>Portfolio-Tracking</li>
+                    <li>API-Zugang</li>
+                    <li>Persönlicher Support</li>
+                </ul>
+                <a href="#signup" class="price-btn">Kostenlos starten</a>
             </div>
         </div>
     </section>
 
-    <!-- Signup -->
+    <!-- ==================== SIGNUP ==================== -->
     <section class="signup-section" id="signup">
-        <div class="container">
-            <div class="signup-box">
-                <h2>Sichere dir deinen Beta-Zugang</h2>
-                <p>Melde dich jetzt an und erhalte 3 Monate kostenlos Zugang zur Beta.</p>
-                
-                <form class="signup-form" action="https://formspree.io/f/xrpekyad" method="POST">
-                    <input type="email" name="email" placeholder="Deine E-Mail-Adresse" required>
-                    <button type="submit">Kostenlos vormerken</button>
-                </form>
-                
-                <p style="font-size: 0.85em; margin-top: 20px; color: var(--text-secondary);">
-                    Kein Spam. Jederzeit abmeldbar.
-                </p>
-            </div>
+        <div class="signup-content">
+            <h2>Beginnen Sie<br><em>heute.</em></h2>
+            <p>
+                Melden Sie sich jetzt an und erhalten Sie einen Monat 
+                kostenlosen Zugang zu Edaris — alle Funktionen, 
+                ohne Einschränkungen.
+            </p>
             
-            <div class="disclaimer">
-                <strong>⚠️ Wichtiger Hinweis:</strong> Diese Anwendung bietet ausschließlich Daten und Informationen. 
-                Sie stellt KEINE Anlageberatung, Anlagevermittlung oder Finanzportfolioverwaltung dar. 
-                Alle angezeigten Scores und Daten sind reine Informationen und begründen keine Empfehlung zum Kauf oder Verkauf von Wertpapieren. 
-                Investitionen in Aktien sind mit Risiken verbunden. Du kannst dein gesamtes eingesetztes Kapital verlieren. 
-                Vergangene Performance ist kein Indikator für zukünftige Ergebnisse. 
-                Investiere nur, was du dir leisten kannst zu verlieren.
-            </div>
+            <form class="signup-form" action="https://formspree.io/f/xrpekyad" method="POST">
+                <input type="email" name="email" placeholder="Ihre E-Mail-Adresse" required>
+                <button type="submit">Zugang anfordern</button>
+            </form>
+            
+            <p class="signup-note">Kein Spam. Keine Kreditkarte. Jederzeit abmeldbar.</p>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ==================== DISCLAIMER + FOOTER ==================== -->
+    <div style="background: var(--cream);">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 60px;">
+            <div class="disclaimer">
+                <strong>Wichtiger Hinweis:</strong> Edaris bietet ausschließlich Daten und Informationen. 
+                Die Anwendung stellt keine Anlageberatung, Anlagevermittlung oder Finanzportfolioverwaltung dar. 
+                Alle angezeigten Scores und Analysen sind reine Informationen und begründen keine Empfehlung 
+                zum Kauf oder Verkauf von Wertpapieren. Investitionen in Aktien sind mit Risiken verbunden. 
+                Sie können Ihr gesamtes eingesetztes Kapital verlieren. Vergangene Performance ist kein 
+                Indikator für zukünftige Ergebnisse.
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <div class="container">
-            <div class="footer-content">
+        <div class="footer-inner">
+            <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="#" class="logo">📊 Stock Signals</a>
-                    <p>
-                        KI-basierte Aktien-Analyse für informierte Entscheidungen. 
-                        Reine Information, keine Anlageberatung.
-                    </p>
+                    <div class="logo">
+                        <svg class="logo-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="#b8935a" stroke-width="0.5"/>
+                            <text x="50" y="62" font-family="Cormorant Garamond, serif" font-size="42" font-weight="500" text-anchor="middle" fill="#f5f1e8">EA</text>
+                        </svg>
+                        <div class="logo-text">
+                            <span class="logo-name" style="color: var(--cream);">Edaris</span>
+                            <span class="logo-tagline">Intelligence</span>
+                        </div>
+                    </div>
+                    <p>KI-basierte Aktien-Analyse mit Klarheit und Zurückhaltung. Reine Information, keine Anlageberatung.</p>
                 </div>
                 
                 <div class="footer-col">
                     <h4>Produkt</h4>
                     <ul>
-                        <li><a href="#features">Features</a></li>
+                        <li><a href="#features">Analyse</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
                         <li><a href="#pricing">Preise</a></li>
-                        <li><a href="#demo">Demo</a></li>
                     </ul>
                 </div>
                 
@@ -994,12 +1482,339 @@
                         <li><a href="agb.html">AGB</a></li>
                     </ul>
                 </div>
+                
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <ul>
+                        <li><a href="mailto:kontakt@edaris.ai">kontakt@edaris.ai</a></li>
+                    </ul>
+                </div>
             </div>
             
             <div class="footer-bottom">
-                <p>© 2026 Stock Signals. Alle Rechte vorbehalten.</p>
+                © 2026 Edaris Intelligence — Alle Rechte vorbehalten
             </div>
         </div>
     </footer>
+
+    <!-- ==================== STOCK MODAL ==================== -->
+    <div class="modal-overlay" id="stockModal" onclick="closeStockModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-symbol" id="modalSymbol">NVDA</div>
+                    <div class="modal-company" id="modalCompany">NVIDIA Corporation</div>
+                </div>
+                <button class="modal-close" onclick="closeStockModal()">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-price-section">
+                    <div>
+                        <div class="modal-price" id="modalPrice">$495.22</div>
+                        <div class="modal-change positive" id="modalChange">+6.1% · 5 Tage</div>
+                    </div>
+                    <div>
+                        <div class="modal-score-label">Score</div>
+                        <div class="modal-score-value" id="modalScore">78</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+                
+                <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.8em; color: var(--royal); margin-bottom: 30px;">Analyse-Faktoren</div>
+                <div class="factors-grid">
+                    <div class="factor">
+                        <div class="factor-name">Technisch</div>
+                        <div class="factor-value" id="factorTech">75</div>
+                        <div class="factor-bar"><div class="factor-bar-fill" id="barTech"></div></div>
+                    </div>
+                    <div class="factor">
+                        <div class="factor-name">News-Sentiment</div>
+                        <div class="factor-value" id="factorNews">68</div>
+                        <div class="factor-bar"><div class="factor-bar-fill" id="barNews"></div></div>
+                    </div>
+                    <div class="factor">
+                        <div class="factor-name">Volumen</div>
+                        <div class="factor-value" id="factorVol">82</div>
+                        <div class="factor-bar"><div class="factor-bar-fill" id="barVol"></div></div>
+                    </div>
+                    <div class="factor">
+                        <div class="factor-name">Insider</div>
+                        <div class="factor-value" id="factorIns">70</div>
+                        <div class="factor-bar"><div class="factor-bar-fill" id="barIns"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FEATURE MODAL ==================== -->
+    <div class="modal-overlay" id="featureModal" onclick="closeFeatureModal(event)">
+        <div class="modal-content feature-modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="feature-modal-icon" id="featureModalIcon">01</div>
+                <button class="modal-close" onclick="closeFeatureModal()">×</button>
+            </div>
+            <div class="feature-modal-body">
+                <h2 id="featureModalTitle">Umfassende Analyse</h2>
+                <div id="featureModalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== STOCK DATA ====================
+        const stocks = [
+            { symbol: 'NVDA', company: 'NVIDIA Corporation', price: 495.22, change: 6.1, score: 78, factors: { tech: 75, news: 68, vol: 82, ins: 70 } },
+            { symbol: 'AMD', company: 'Advanced Micro Devices', price: 145.80, change: 4.2, score: 75, factors: { tech: 72, news: 65, vol: 78, ins: 68 } },
+            { symbol: 'AAPL', company: 'Apple Inc.', price: 189.37, change: 1.2, score: 72, factors: { tech: 70, news: 62, vol: 68, ins: 75 } },
+            { symbol: 'V', company: 'Visa Inc.', price: 252.89, change: 2.3, score: 68, factors: { tech: 65, news: 60, vol: 70, ins: 72 } },
+            { symbol: 'TSLA', company: 'Tesla, Inc.', price: 248.42, change: -3.1, score: 42, factors: { tech: 40, news: 45, vol: 55, ins: 35 } }
+        ];
+
+        function renderStocks() {
+            const list = document.getElementById('stockList');
+            list.innerHTML = stocks.map(stock => {
+                const changeClass = stock.change >= 0 ? 'positive' : 'negative';
+                const changeSign = stock.change >= 0 ? '+' : '';
+                return `
+                    <div class="stock-item" onclick="openStockModal('${stock.symbol}')">
+                        <div class="stock-left">
+                            <span class="stock-symbol">${stock.symbol}</span>
+                            <span class="stock-score">Score<span class="stock-score-value">${stock.score}</span></span>
+                        </div>
+                        <div class="stock-price">
+                            <div class="stock-price-value">$${stock.price.toFixed(2)}</div>
+                            <div class="stock-change ${changeClass}">${changeSign}${stock.change}%</div>
+                        </div>
+                        <span class="stock-arrow">→</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== STOCK MODAL ====================
+        let currentChart = null;
+        
+        function openStockModal(symbol) {
+            const stock = stocks.find(s => s.symbol === symbol);
+            if (!stock) return;
+            
+            document.getElementById('modalSymbol').textContent = stock.symbol;
+            document.getElementById('modalCompany').textContent = stock.company;
+            document.getElementById('modalPrice').textContent = '$' + stock.price.toFixed(2);
+            document.getElementById('modalScore').textContent = stock.score;
+            
+            const changeEl = document.getElementById('modalChange');
+            changeEl.textContent = (stock.change >= 0 ? '+' : '') + stock.change + '% · 5 Tage';
+            changeEl.className = 'modal-change ' + (stock.change >= 0 ? 'positive' : 'negative');
+            
+            document.getElementById('factorTech').textContent = stock.factors.tech;
+            document.getElementById('factorNews').textContent = stock.factors.news;
+            document.getElementById('factorVol').textContent = stock.factors.vol;
+            document.getElementById('factorIns').textContent = stock.factors.ins;
+            
+            setTimeout(() => {
+                document.getElementById('barTech').style.width = stock.factors.tech + '%';
+                document.getElementById('barNews').style.width = stock.factors.news + '%';
+                document.getElementById('barVol').style.width = stock.factors.vol + '%';
+                document.getElementById('barIns').style.width = stock.factors.ins + '%';
+            }, 100);
+            
+            drawChart(stock);
+            document.getElementById('stockModal').classList.add('active');
+        }
+        
+        function drawChart(stock) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            if (currentChart) currentChart.destroy();
+            
+            const labels = [];
+            const data = [];
+            let price = stock.price * 0.94;
+            
+            for (let i = 30; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }));
+                price = price * (1 + (Math.random() - 0.45) * 0.02);
+                data.push(price);
+            }
+            data[data.length - 1] = stock.price;
+            
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: stock.symbol,
+                        data: data,
+                        borderColor: stock.change >= 0 ? '#1e3a8a' : '#b91c1c',
+                        backgroundColor: stock.change >= 0 ? 'rgba(30, 58, 138, 0.05)' : 'rgba(185, 28, 28, 0.05)',
+                        borderWidth: 1.5,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBackgroundColor: '#b8935a',
+                        pointHoverBorderColor: '#b8935a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(26, 26, 26, 0.05)', drawBorder: false },
+                            ticks: { color: '#6b7280', font: { size: 11 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#6b7280', font: { size: 11 }, maxTicksLimit: 8 }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function closeStockModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('stockModal').classList.remove('active');
+            if (currentChart) { currentChart.destroy(); currentChart = null; }
+        }
+
+        // ==================== FEATURE MODAL ====================
+        const featureData = {
+            analysis: {
+                icon: '01',
+                title: 'Umfassende Analyse',
+                content: `
+                    <p>Unser System analysiert kontinuierlich über 200 US-Aktien aus verschiedenen Sektoren — Technologie, Finanzen, Healthcare, Energie und mehr.</p>
+                    <p><strong>Was genau passiert:</strong></p>
+                    <ul>
+                        <li>Automatische Scans alle 5 Minuten während der US-Börsenzeiten</li>
+                        <li>Überwachung von Kursen, Volumen und Marktbewegungen</li>
+                        <li>Erkennung ungewöhnlicher Aktivitäten</li>
+                        <li>Kombination mit echten News und Insider-Daten</li>
+                    </ul>
+                    <p>Die Analyse läuft vollautomatisch in der Cloud. Sie müssen nichts tun. Bei interessanten Signalen werden Sie benachrichtigt.</p>
+                `
+            },
+            scores: {
+                icon: '02',
+                title: 'Klare Scores',
+                content: `
+                    <p>Jede Aktie erhält einen Score von 0 bis 100, der aus neun verschiedenen Faktoren berechnet wird. Dies macht die Bewertung transparent und nachvollziehbar.</p>
+                    <p><strong>Die neun Faktoren:</strong></p>
+                    <ul>
+                        <li>Technische Analyse — RSI, Momentum, Trend</li>
+                        <li>News-Sentiment — positive und negative Nachrichten</li>
+                        <li>Insider-Aktivität — Käufe und Verkäufe von Firmenchefs</li>
+                        <li>Analysten-Ratings — Bewertungen von Profis</li>
+                        <li>Volumen — Handelsaktivität</li>
+                        <li>Social Media — Stimmung auf Reddit</li>
+                        <li>Markt-Regime — Gesamtmarktphase</li>
+                        <li>Sektor — Branchentrend</li>
+                        <li>Earnings-Nähe — stehen Quartalszahlen an?</li>
+                    </ul>
+                    <p>Je höher der Score, desto mehr Faktoren sprechen für die Aktie. Ein Score über 70 gilt als starkes Signal.</p>
+                `
+            },
+            technical: {
+                icon: '03',
+                title: 'Technische Analyse',
+                content: `
+                    <p>Wir nutzen die wichtigsten technischen Indikatoren, die von professionellen Tradern weltweit verwendet werden.</p>
+                    <p><strong>RSI (Relative Strength Index):</strong></p>
+                    <ul>
+                        <li>Misst, ob eine Aktie überkauft oder überverkauft ist</li>
+                        <li>Werte zwischen 40 und 70 gelten als ideal</li>
+                        <li>Unter 30: möglicher Erholungskurs</li>
+                        <li>Über 80: Vorsicht vor Rücksetzer</li>
+                    </ul>
+                    <p><strong>Momentum:</strong> Die Kursentwicklung der letzten fünf Tage zeigt die Stärke des Trends.</p>
+                    <p><strong>Trend:</strong> Wir prüfen, ob der Preis über wichtigen Durchschnittslinien liegt.</p>
+                    <p><strong>Volumen:</strong> Ungewöhnlich hohes Handelsvolumen bestätigt Bewegungen.</p>
+                `
+            },
+            news: {
+                icon: '04',
+                title: 'News-Sentiment',
+                content: `
+                    <p>Nachrichten haben einen großen Einfluss auf Aktienkurse. Unser System liest kontinuierlich aktuelle Nachrichten zu den überwachten Aktien.</p>
+                    <p><strong>Wie es funktioniert:</strong></p>
+                    <ul>
+                        <li>Alle News der letzten 24 Stunden werden analysiert</li>
+                        <li>Erkennung von positiven und negativen Schlüsselwörtern</li>
+                        <li>Berücksichtigung von bis zu zehn Artikeln pro Aktie</li>
+                        <li>Einberechnung in den Gesamtscore</li>
+                    </ul>
+                    <p><strong>Positive Signalwörter:</strong> "beat", "growth", "upgrade", "partnership", "record", "profit", "buyback".</p>
+                    <p><strong>Negative Signalwörter:</strong> "miss", "downgrade", "lawsuit", "investigation", "warning", "loss".</p>
+                `
+            },
+            insider: {
+                icon: '05',
+                title: 'Insider-Aktivität',
+                content: `
+                    <p>Insider sind Personen im Unternehmen — etwa CEOs oder CFOs —, die Zugang zu internen Informationen haben. Ihre Trades geben wichtige Hinweise.</p>
+                    <p><strong>Was wir tracken:</strong></p>
+                    <ul>
+                        <li>Käufe von Insidern — ein positives Signal</li>
+                        <li>Verkäufe von Insidern — kann negativ sein</li>
+                        <li>Anzahl der Transaktionen der letzten 90 Tage</li>
+                        <li>Volumen der Transaktionen</li>
+                    </ul>
+                    <p><strong>Warum das wichtig ist:</strong> Wenn Firmenchefs ihre eigenen Aktien kaufen, zeigt das Vertrauen in die Zukunft des Unternehmens.</p>
+                    <p>Die Daten stammen von der SEC und werden über Finnhub bereitgestellt.</p>
+                `
+            },
+            ml: {
+                icon: '06',
+                title: 'Selbstlernend',
+                content: `
+                    <p>Unser System wird mit der Zeit immer besser. Es lernt kontinuierlich aus den Ergebnissen seiner Vorhersagen.</p>
+                    <p><strong>Wie das funktioniert:</strong></p>
+                    <ul>
+                        <li>Jeder Trade wird gespeichert und ausgewertet</li>
+                        <li>Bei Gewinn: Die beteiligten Faktoren werden verstärkt</li>
+                        <li>Bei Verlust: Die Gewichtung wird angepasst</li>
+                        <li>Nach 100+ Trades: deutlich bessere Vorhersagen</li>
+                    </ul>
+                    <p><strong>Machine Learning:</strong> Wir nutzen ein Modell, das neun Faktoren kombiniert und die Gewichtung jedes Faktors ständig optimiert.</p>
+                    <p>Je länger das System läuft, desto präziser werden die Signale.</p>
+                `
+            }
+        };
+
+        function openFeatureModal(feature) {
+            const data = featureData[feature];
+            if (!data) return;
+            document.getElementById('featureModalIcon').textContent = data.icon;
+            document.getElementById('featureModalTitle').textContent = data.title;
+            document.getElementById('featureModalContent').innerHTML = data.content;
+            document.getElementById('featureModal').classList.add('active');
+        }
+        
+        function closeFeatureModal(event) {
+            if (event && event.target !== event.currentTarget && event.target.className !== 'modal-close') return;
+            document.getElementById('featureModal').classList.remove('active');
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStocks();
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeStockModal();
+                    closeFeatureModal();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
