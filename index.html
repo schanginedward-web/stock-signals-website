@@ -243,22 +243,51 @@
             padding: 0 !important; 
             max-width: 100% !important; 
         }
-        .brevo-custom-wrapper .sib-form-block__button { 
-            width: 100%; padding: 24px 46px !important; background: var(--gold) !important; 
-            color: var(--royal) !important; border-radius: 0 !important; font-size: 0.8em !important; 
-            letter-spacing: 0.2em !important; text-transform: uppercase !important; font-weight: 600 !important; 
-            font-family: 'Inter', sans-serif !important; border: 1px solid var(--gold) !important;
-            transition: background 0.3s ease !important;
-        }
-        .brevo-custom-wrapper .sib-form-block__button:hover { background: var(--gold-light) !important; }
+        
+        /* Das Eingabefeld */
         .brevo-custom-wrapper .entry__field input { 
-            padding: 24px 30px !important; background: transparent !important; 
-            border: 1px solid var(--gold) !important; color: var(--cream) !important; 
-            font-size: 1em !important; font-family: 'Inter', sans-serif !important; border-radius: 0 !important;
-            margin-bottom: 15px;
+            padding: 24px 30px !important; 
+            background: transparent !important; 
+            border: 1px solid var(--gold) !important; 
+            color: var(--cream) !important; 
+            font-size: 1em !important; 
+            font-family: 'Inter', sans-serif !important; 
+            border-radius: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
-        .brevo-custom-wrapper .entry__label, .brevo-custom-wrapper .entry__specification, .brevo-custom-wrapper .sib-form-block { 
+        
+        /* Der Button */
+        .brevo-custom-wrapper .sib-form-block__button { 
+            width: 100% !important; 
+            padding: 24px 46px !important; 
+            background: var(--gold) !important; 
+            color: var(--royal) !important; 
+            border-radius: 0 !important; 
+            font-size: 0.8em !important; 
+            letter-spacing: 0.2em !important; 
+            text-transform: uppercase !important; 
+            font-weight: 600 !important; 
+            font-family: 'Inter', sans-serif !important; 
+            border: 1px solid var(--gold) !important;
+            margin-top: 15px !important;
+            cursor: pointer !important;
+        }
+        
+        .brevo-custom-wrapper .sib-form-block__button:hover { 
+            background: var(--gold-light) !important; 
+        }
+
+        /* Verstecke nur die unerwünschten Labels, aber NICHT die Formularblöcke */
+        .brevo-custom-wrapper .entry__label, 
+        .brevo-custom-wrapper .entry__specification { 
             display: none !important; 
+        }
+        
+        /* Verstecke den überflüssigen Brevo-Text */
+        .brevo-custom-wrapper .sib-text-form-block,
+        .brevo-custom-wrapper .sib-form-block p {
+            display: none !important;
         }
 
         .signup-note { margin-top: 30px; font-size: 0.85em; color: rgba(245, 241, 232, 0.5); letter-spacing: 0.05em; }
